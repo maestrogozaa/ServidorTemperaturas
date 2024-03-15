@@ -86,14 +86,42 @@ int main(int argc, char *argv[])
 				strcpy (respuesta,"SI");
 				else
 					strcpy (respuesta,"NO");
-			else //quiere saber si es alto
+			else if (codigo ==3)				
 			{
+				//quiere saber si es alto
 				p = strtok( NULL, "/");
 				float altura =  atof (p);
 				if (altura > 1.70)
 					sprintf (respuesta, "%s: eres alto",nombre);
 				else
 					sprintf (respuesta, "%s: eresbajo",nombre);
+			}
+			else if (codigo ==4)
+			{
+				int palindromo = 1;
+				//quiere saber si es palíndromo
+				for(i=0; i<strlen(nombre)/2; i++)
+				{
+					char primera = tolower(nombre[i]);
+					char ultima = tolower(nombre[strlen(nombre)-1-i]);
+					if (primera != ultima){
+						palindromo = 0;
+					}
+				}
+				if(palindromo ==0){
+					sprintf (respuesta, "Tu nombre NO es palindromo");
+				}
+				else{
+					sprintf (respuesta, "Tu nombre SI es palindromo");
+				}
+			}
+			else if(codigo ==5)
+			{
+				for (i=0; i<strlen(nombre); i++)
+				{
+					nombre[i] = toupper(nombre[i]);
+				}
+				sprintf (respuesta, "Tu nombre en mayusculas es: %s", nombre);
 			}
 				
 			if (codigo !=0)

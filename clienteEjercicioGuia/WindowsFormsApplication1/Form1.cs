@@ -30,7 +30,7 @@ namespace WindowsFormsApplication1
             //Creamos un IPEndPoint con el ip del servidor y puerto del servidor 
             //al que deseamos conectarnos
             IPAddress direc = IPAddress.Parse("192.168.56.102");
-            IPEndPoint ipep = new IPEndPoint(direc, 9050);
+            IPEndPoint ipep = new IPEndPoint(direc, 9000);
             
 
             //Creamos el socket 
@@ -85,7 +85,7 @@ namespace WindowsFormsApplication1
                     MessageBox.Show("Tu nombre NO bonito. Lo siento.");
 
             }
-            else
+            else if (Alto.Checked)
             {
                 // Enviamos nombre y altura
                 string mensaje = "3/" + nombre.Text + "/" + alturaBox.Text;
@@ -99,7 +99,34 @@ namespace WindowsFormsApplication1
                 mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
                 MessageBox.Show(mensaje);
             }
-             
+            else if (Palindromo.Checked)
+            {
+                // Enviamos nombre
+                string mensaje = "4/" + nombre.Text;
+                // Enviamos al servidor el nombre tecleado
+                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                server.Send(msg);
+
+                //Recibimos la respuesta del servidor
+                byte[] msg2 = new byte[80];
+                server.Receive(msg2);
+                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
+                MessageBox.Show(mensaje);
+            }    
+            else if (Mayusculas.Checked)
+            {
+                // Enviamos nombre
+                string mensaje = "5/" + nombre.Text;
+                // Enviamos al servidor el nombre tecleado
+                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                server.Send(msg);
+
+                //Recibimos la respuesta del servidor
+                byte[] msg2 = new byte[80];
+                server.Receive(msg2);
+                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
+                MessageBox.Show(mensaje);
+            }
         
         }
 
