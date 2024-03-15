@@ -65,64 +65,21 @@ int main(int argc, char *argv[])
 			char *p = strtok( peticion, "/");
 			int codigo =  atoi (p);
 			// Ya tenemos el c?digo de la petici?n
-			char nombre[20];
+			int temperatura;
 			
 			if (codigo !=0)
 			{
-				p = strtok( NULL, "/");
-
-				strcpy (nombre, p);
+				temperatura = atoi(strtok( NULL, "/"));
 				// Ya tenemos el nombre
-				printf ("Codigo: %d, Nombre: %s\n", codigo, nombre);
+				printf ("Codigo: %d, Temperatura: %i\n", codigo, temperatura);
 			}
 			
 			if (codigo ==0) //petici?n de desconexi?n
 				terminar=1;
-			else if (codigo ==1) //piden la longitd del nombre
-				sprintf (respuesta,"%d",strlen (nombre));
-			else if (codigo ==2)
-				// quieren saber si el nombre es bonito
-				if((nombre[0]=='M') || (nombre[0]=='S'))
-				strcpy (respuesta,"SI");
-				else
-					strcpy (respuesta,"NO");
-			else if (codigo ==3)				
-			{
-				//quiere saber si es alto
-				p = strtok( NULL, "/");
-				float altura =  atof (p);
-				if (altura > 1.70)
-					sprintf (respuesta, "%s: eres alto",nombre);
-				else
-					sprintf (respuesta, "%s: eresbajo",nombre);
-			}
-			else if (codigo ==4)
-			{
-				int palindromo = 1;
-				//quiere saber si es palíndromo
-				for(i=0; i<strlen(nombre)/2; i++)
-				{
-					char primera = tolower(nombre[i]);
-					char ultima = tolower(nombre[strlen(nombre)-1-i]);
-					if (primera != ultima){
-						palindromo = 0;
-					}
-				}
-				if(palindromo ==0){
-					sprintf (respuesta, "Tu nombre NO es palindromo");
-				}
-				else{
-					sprintf (respuesta, "Tu nombre SI es palindromo");
-				}
-			}
-			else if(codigo ==5)
-			{
-				for (i=0; i<strlen(nombre); i++)
-				{
-					nombre[i] = toupper(nombre[i]);
-				}
-				sprintf (respuesta, "Tu nombre en mayusculas es: %s", nombre);
-			}
+			else if (codigo ==1) //F to ºC
+				sprintf (respuesta,"%i ", (temperatura - 32) * 5/9);
+			else if (codigo ==2) //ºC to F
+				sprintf (respuesta,"%i ",(temperatura * 9/5) + 32);			
 				
 			if (codigo !=0)
 			{

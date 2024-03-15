@@ -53,23 +53,10 @@ namespace WindowsFormsApplication1
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (Longitud.Checked)
+            if (fahrenheitCelsius.Checked)
             {
-                string mensaje = "1/" + nombre.Text;
-                // Enviamos al servidor el nombre tecleado
-                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-                server.Send(msg);
-
-                //Recibimos la respuesta del servidor
-                byte[] msg2 = new byte[80];
-                server.Receive(msg2);
-                mensaje = Encoding.ASCII.GetString(msg2).Split ('\0')[0];
-                MessageBox.Show("La longitud de tu nombre es: " + mensaje);
-            }
-            else if (Bonito.Checked)
-            {
-                string mensaje = "2/" + nombre.Text;
-                // Enviamos al servidor el nombre tecleado
+                string mensaje = "1/" + temperatura.Text;
+                // Enviamos al servidor la temperatura tecleada
                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
                 server.Send(msg);
 
@@ -77,19 +64,12 @@ namespace WindowsFormsApplication1
                 byte[] msg2 = new byte[80];
                 server.Receive(msg2);
                 mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-
-
-                if (mensaje == "SI")
-                    MessageBox.Show("Tu nombre ES bonito.");
-                else
-                    MessageBox.Show("Tu nombre NO bonito. Lo siento.");
-
+                MessageBox.Show(mensaje + " ºC");
             }
-            else if (Alto.Checked)
+            else if (celsiusFahrenheit.Checked)
             {
-                // Enviamos nombre y altura
-                string mensaje = "3/" + nombre.Text + "/" + alturaBox.Text;
-                // Enviamos al servidor el nombre tecleado
+                string mensaje = "2/" + temperatura.Text;
+                // Enviamos al servidor la temperatura tecleada
                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
                 server.Send(msg);
 
@@ -97,37 +77,9 @@ namespace WindowsFormsApplication1
                 byte[] msg2 = new byte[80];
                 server.Receive(msg2);
                 mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-                MessageBox.Show(mensaje);
-            }
-            else if (Palindromo.Checked)
-            {
-                // Enviamos nombre
-                string mensaje = "4/" + nombre.Text;
-                // Enviamos al servidor el nombre tecleado
-                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-                server.Send(msg);
+                MessageBox.Show(mensaje + " F");
 
-                //Recibimos la respuesta del servidor
-                byte[] msg2 = new byte[80];
-                server.Receive(msg2);
-                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-                MessageBox.Show(mensaje);
-            }    
-            else if (Mayusculas.Checked)
-            {
-                // Enviamos nombre
-                string mensaje = "5/" + nombre.Text;
-                // Enviamos al servidor el nombre tecleado
-                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-                server.Send(msg);
-
-                //Recibimos la respuesta del servidor
-                byte[] msg2 = new byte[80];
-                server.Receive(msg2);
-                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-                MessageBox.Show(mensaje);
             }
-        
         }
 
         private void button3_Click(object sender, EventArgs e)
