@@ -2,3 +2,4 @@
 # ServidorTemperaturas
 # ServidorTemperaturas
 #ServidorTemperaturas
+# ServidorTemperaturas
