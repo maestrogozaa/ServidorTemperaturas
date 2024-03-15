@@ -5,49 +5,23 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <stdio.h>
+#include <pthread.h>
 
-
-
-int main(int argc, char *argv[])
+void *AtenderCliente (void *socket)
 {
+	int sock_conn;
+	int *s;
+	s= (int *) socket;
+	sock_conn= *s;
 	
-	int sock_conn, sock_listen, ret;
-	struct sockaddr_in serv_adr;
+	//int socket_conn = * (int *) socket;
+	
 	char peticion[512];
 	char respuesta[512];
-	// INICIALITZACIONS
-	// Obrim el socket
-	if ((sock_listen = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-		printf("Error creant socket");
-	// Fem el bind al port
+	int ret;
 	
 	
-	memset(&serv_adr, 0, sizeof(serv_adr));// inicialitza a zero serv_addr
-	serv_adr.sin_family = AF_INET;
-	
-	// asocia el socket a cualquiera de las IP de la m?quina. 
-	//htonl formatea el numero que recibe al formato necesario
-	serv_adr.sin_addr.s_addr = htonl(INADDR_ANY);
-	// establecemos el puerto de escucha
-	serv_adr.sin_port = htons(9000);
-	if (bind(sock_listen, (struct sockaddr *) &serv_adr, sizeof(serv_adr)) < 0)
-		printf ("Error al bind");
-	
-	if (listen(sock_listen, 3) < 0)
-		printf("Error en el Listen");
-	
-	int i;
-	// Bucle infinito
-	for (;;){
-		printf ("Escuchando\n");
-		
-		sock_conn = accept(sock_listen, NULL, NULL);
-		printf ("He recibido conexion\n");
-		//sock_conn es el socket que usaremos para este cliente
-		
 		int terminar =0;
-		// Entramos en un bucle para atender todas las peticiones de este cliente
-		//hasta que se desconecte
 		while (terminar ==0)
 		{
 			// Ahora recibimos la petici?n
@@ -80,7 +54,7 @@ int main(int argc, char *argv[])
 				sprintf (respuesta,"%i ", (temperatura - 32) * 5/9);
 			else if (codigo ==2) //ºC to F
 				sprintf (respuesta,"%i ",(temperatura * 9/5) + 32);			
-				
+			
 			if (codigo !=0)
 			{
 				
@@ -91,5 +65,57 @@ int main(int argc, char *argv[])
 		}
 		// Se acabo el servicio para este cliente
 		close(sock_conn); 
-	}
+	
 }
+
+
+int main(int argc, char *argv[])
+{
+	
+	int sock_conn, sock_listen;
+	struct sockaddr_in serv_adr;
+	
+	// INICIALITZACIONS
+	// Obrim el socket
+	if ((sock_listen = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+		printf("Error creant socket");
+	// Fem el bind al port
+	
+	
+	memset(&serv_adr, 0, sizeof(serv_adr));// inicialitza a zero serv_addr
+	serv_adr.sin_family = AF_INET;
+	
+	// asocia el socket a cualquiera de las IP de la m?quina. 
+	//htonl formatea el numero que recibe al formato necesario
+	serv_adr.sin_addr.s_addr = htonl(INADDR_ANY);
+	// establecemos el puerto de escucha
+	serv_adr.sin_port = htons(9080);
+	if (bind(sock_listen, (struct sockaddr *) &serv_adr, sizeof(serv_adr)) < 0)
+		printf ("Error al bind");
+	
+	if (listen(sock_listen, 3) < 0)
+		printf("Error en el Listen");
+	
+	int i;
+	int sockets[100];
+	pthread_t thread;
+	i=0;
+	// Bucle para atender a 5 clientes
+	for (;;){
+		printf ("Escuchando\n");
+		
+		sock_conn = accept(sock_listen, NULL, NULL);
+		printf ("He recibido conexion\n");
+		
+		sockets[i] =sock_conn;
+		//sock_conn es el socket que usaremos para este cliente
+		
+		// Crear thead y decirle lo que tiene que hacer
+		
+		pthread_create (&thread, NULL, AtenderCliente,&sockets[i]);
+		i=i+1;
+		
+	}	
+	
+}
+
